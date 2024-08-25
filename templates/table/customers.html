@@ -1,0 +1,78 @@
+{% extends "web/app/app_base.html" %}
+{% load form_tags %}
+{% load i18n %}
+{% load static %}
+{% block app %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers</title>
+</head>
+<body>
+    {%for item in customers%}
+  
+    <div class="overflow-x-auto" >
+        <table class="table">
+          <!-- head -->
+          <thead>
+            <tr>
+              <th></th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Phone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- row 1 -->
+            <tr>
+              <td>{{item.first_name}}</td>
+              <td>{{item.last_name}}</td>
+              <td>{{item.phone}}</td>
+            </tr>
+            
+            <!-- <tr class="hover">
+              <th>2</th>
+              <td>Hart Hagerty</td>
+              <td>Desktop Support Technician</td>
+              <td>Purple</td>
+            </tr> -->
+           
+            <!-- <tr>
+              <th>3</th>
+              <td>Brice Swyre</td>
+              <td>Tax Accountant</td>
+              <td>Red</td>
+            </tr> -->
+          </tbody>
+        </table>
+      </div>
+    {%endfor%}
+</body>
+</html>
+{% endblock %}
+<script>
+  const App = SiteJS.app;
+  let uploadlabel = document.getElementById("profile-upload-label")
+      uploadlabel.innerHTML = '<span class="pg-icon"><i class="fa fa-refresh"></i></span><span>Uploading...</span>';
+      uploadlabel.classList.add('is-active');
+      // upload to server
+      let formData = new FormData();
+      formData.append('csrfmiddlewaretoken', App.Cookies.get('csrftoken'));
+  fetch("http://localhost:8080/customers/", {method: "GET", body: formData, credentials: 'same-origin'}).then(
+        function (response) {
+          if (response.ok) {
+            response.text().then(function (text) {
+              // update UI
+              console.error("text",text);
+            });
+          } else {
+            response.json().then(function (errorResponse) {
+              console.error(errorResponse);
+             
+            });
+          }
+        }
+      );
+</script>
